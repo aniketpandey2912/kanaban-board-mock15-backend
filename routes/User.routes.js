@@ -15,7 +15,7 @@ userRouter.post("/signup", async (req, res) => {
     let user = await UserModel.find({ email });
 
     if (user.length > 0) {
-      res.send({ mssg: "User already exists, login to continue" });
+      res.send({ mssg: "User already exists, login to continue", err: false });
     } else {
       bcrypt.hash(password, 5, async (err, hash) => {
         if (err) {
@@ -23,7 +23,7 @@ userRouter.post("/signup", async (req, res) => {
         } else {
           let newUser = new UserModel({ email, password: hash });
           await newUser.save();
-          res.send({ mssg: "Signup successful" });
+          res.send({ mssg: "Signup successful", err: false });
         }
       });
     }
@@ -42,7 +42,7 @@ userRouter.post("/login", async (req, res) => {
       bcrypt.compare(password, user[0].password, async (err, result) => {
         if (result) {
           const token = jwt.sign({ userID: user[0]._id }, "masai");
-          res.send({ mssg: "Login successfull", token });
+          res.send({ mssg: "Login successfull", token, err: false });
         } else {
           res.send({ mssg: "Wrong credentials" });
         }
