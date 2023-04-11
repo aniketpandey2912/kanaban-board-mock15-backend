@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { userRouter } = require("./routes/User.routes");
 
 app.use(cors());
 app.use(express.json());
@@ -10,6 +11,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("HOME PAGE");
 });
+
+app.use("/users", userRouter);
 
 app.listen(process.env.PORT, async () => {
   try {
